@@ -1,0 +1,35 @@
+# Part 4/4: UI & Startup
+# ----------------------
+if __name__ == "__main__":
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.lang import Builder
+# UI Configuration
+Builder.load_string('''
+<GameUI>:
+orientation: 'vertical'
+Label:
+text: 'Zdrowie: ' + str(root.game.player.health)
+Label:
+text: 'Punkty: ' + str(root.game.player.score)
+Button:
+text: 'Atak mieczem'
+on_press: root.attack('miecz')
+''')
+class GameUI(BoxLayout):
+def __init__(self, game, **kwargs):
+super().__init__(**kwargs)
+self.game = game
+def attack(self, style):
+dmg = self.game.combat_system.attack(style)
+print(f"Zadano {dmg} obrażeń!")
+class GameApp(App):
+def build(self):
+game = BeijingGuardianGame()
+return GameUI(game)
+# Start Text Mode
+if input("Uruchomić tryb tekstowy? (T/N) ").lower() == 't':
+game = BeijingGuardianGame()
+game.run()
+else:
+GameApp().run()

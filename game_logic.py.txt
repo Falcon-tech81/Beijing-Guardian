@@ -1,0 +1,42 @@
+# Part 3/4: Combat System
+# -----------------------
+class CombatSystem:
+def __init__(self, player: Player):
+self.player = player
+self.combat_styles = {
+"miecz": {"dmg": 30, "cost": 15},
+"wręcz": {"dmg": 20, "cost": 10},
+"specjalny": {"dmg": 50, "cost": 30}
+}
+def attack(self, style: str):
+if style not in self.combat_styles:
+return False
+cost = self.combat_styles[style]["cost"]
+if self.player.health < cost:
+print("Za mało zdrowia!")
+return False
+self.player.health -= cost
+return random.randint(
+self.combat_styles[style]["dmg"] - 5,
+self.combat_styles[style]["dmg"] + 5
+)
+
+def dodge(self, success_chance: float):
+if random.random() < success_chance:
+print("Uniknięto ataku!")
+return True
+print("Unik nieudany!")
+return False
+
+class WeatherEffects:
+@staticmethod
+def apply_effects(weather: Weather, player: Player):
+effects = {
+Weather.RAIN: {"health": -2, "description": "Ulewa utrudnia akcje"},
+Weather.FOG: {"detection": -30, "description": "Mgła ogranicza widoczność"},
+Weather.SMOG: {"health": -5, "description": "Trujący smog!"}
+}
+if weather in effects:
+effect = effects[weather]
+player.health += effect.get("health", 0)
+print(effect["description"])
